@@ -211,6 +211,8 @@ fun ChatDrawerContent(
             HorizontalDivider()
             Spacer(modifier = Modifier.height(12.dp))
 
+            com.phpizza.sola.ui.theme.HighContrastSetting()
+
             // Footer
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -241,6 +243,7 @@ private fun DrawerSessionItem(
 
     Surface(
         shape = RoundedCornerShape(12.dp),
+        border = com.phpizza.sola.ui.theme.contrastBorder(selected = isSelected),
         color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
         contentColor = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface,
         modifier = Modifier

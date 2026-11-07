@@ -104,6 +104,7 @@ fun SuggestionChips(
         ) {
             suggestions.forEach { suggestion ->
                 Surface(
+                    border = com.phpizza.sola.ui.theme.contrastBorder(),
                     shape = RoundedCornerShape(16.dp),
                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     contentColor = MaterialTheme.colorScheme.onSurface,

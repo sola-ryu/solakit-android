@@ -98,17 +98,22 @@ fun ChatMessageItem(
 
             // Message Bubble
             Surface(
+                border = com.phpizza.sola.ui.theme.contrastBorder(),
                 shape = if (isUser) {
                     RoundedCornerShape(topStart = 16.dp, topEnd = 4.dp, bottomStart = 16.dp, bottomEnd = 16.dp)
                 } else {
                     RoundedCornerShape(topStart = 4.dp, topEnd = 16.dp, bottomStart = 16.dp, bottomEnd = 16.dp)
                 },
-                color = if (isUser) {
+                color = if (com.phpizza.sola.ui.theme.LocalHighContrast.current) {
+                    MaterialTheme.colorScheme.surface
+                } else if (isUser) {
                     MaterialTheme.colorScheme.primary
                 } else {
                     MaterialTheme.colorScheme.surfaceVariant
                 },
-                contentColor = if (isUser) {
+                contentColor = if (com.phpizza.sola.ui.theme.LocalHighContrast.current) {
+                    MaterialTheme.colorScheme.onSurface
+                } else if (isUser) {
                     MaterialTheme.colorScheme.onPrimary
                 } else {
                     MaterialTheme.colorScheme.onSurfaceVariant
@@ -135,14 +140,14 @@ fun ChatMessageItem(
                             CircularProgressIndicator(
                                 modifier = Modifier.size(12.dp),
                                 strokeWidth = 2.dp,
-                                color = if (isUser) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary
+                                color = if (isUser && !com.phpizza.sola.ui.theme.LocalHighContrast.current) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary
                             )
                             Spacer(modifier = Modifier.width(6.dp))
                             Text(
                                 text = "Typing...",
                                 style = MaterialTheme.typography.labelSmall,
                                 fontSize = 10.sp,
-                                color = if (isUser) MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f) else MaterialTheme.colorScheme.outline
+                                color = if (isUser && !com.phpizza.sola.ui.theme.LocalHighContrast.current) MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f) else MaterialTheme.colorScheme.outline
                             )
                         }
                     }

@@ -32,6 +32,7 @@ fun LoginScreen(viewModel: LoginViewModel = viewModel()) {
             modifier = Modifier.widthIn(max = 480.dp).fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            com.phpizza.sola.ui.theme.HighContrastSetting()
             Text("Welcome to Sola", style = MaterialTheme.typography.headlineLarge)
             Text("Connect to your Solakit server to start chatting.",
                 style = MaterialTheme.typography.bodyLarge)

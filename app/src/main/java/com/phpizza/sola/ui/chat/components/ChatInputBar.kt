@@ -41,8 +41,9 @@ fun ChatInputBar(
     modifier: Modifier = Modifier
 ) {
     Surface(
-        tonalElevation = 2.dp,
-        shadowElevation = 4.dp,
+        border = com.phpizza.sola.ui.theme.contrastBorder(),
+        tonalElevation = if (com.phpizza.sola.ui.theme.LocalHighContrast.current) 0.dp else 2.dp,
+        shadowElevation = if (com.phpizza.sola.ui.theme.LocalHighContrast.current) 0.dp else 4.dp,
         color = MaterialTheme.colorScheme.surface,
         modifier = modifier.fillMaxWidth()
     ) {
@@ -62,7 +63,7 @@ fun ChatInputBar(
                 shape = RoundedCornerShape(24.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = Color.Transparent,
+                    unfocusedBorderColor = if (com.phpizza.sola.ui.theme.LocalHighContrast.current) MaterialTheme.colorScheme.outline else Color.Transparent,
                     focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
                     unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
                 ),
