@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.phpizza.sola"
-        minSdk = 23
+        minSdk = 26
         targetSdk = 37
         versionCode = 1
         versionName = "1.0"
@@ -33,6 +33,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
