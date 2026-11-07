@@ -1,6 +1,7 @@
 package com.phpizza.sola.ui.theme
 
 import android.content.Context
+import androidx.core.content.edit
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,10 +26,12 @@ fun AppAppearance(content: @Composable () -> Unit) {
         context.getSharedPreferences("sola_appearance", Context.MODE_PRIVATE)
     }
     var highContrast by remember { mutableStateOf(preferences.getBoolean("high_contrast", false)) }
-    CompositionLocalProvider(LocalSetHighContrast provides { enabled ->
-        highContrast = enabled
-        preferences.edit().putBoolean("high_contrast", enabled).apply()
-    }) {
+    CompositionLocalProvider(
+        LocalSetHighContrast provides { enabled ->
+            highContrast = enabled
+            preferences.edit { putBoolean("high_contrast", enabled) }
+        },
+    ) {
         SolaTheme(highContrast = highContrast, content = content)
     }
 }

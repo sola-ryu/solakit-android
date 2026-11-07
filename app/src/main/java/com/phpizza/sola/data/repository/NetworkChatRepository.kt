@@ -18,10 +18,11 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import java.util.UUID
+import kotlin.time.Duration.Companion.milliseconds
 
 class NetworkChatRepository(
     private val apiServiceSupplier: () -> SolakitApiService = { ApiClient.getService() },
-    private val fallbackLocalRepo: ChatRepository = InMemoryChatRepository()
+    private val fallbackLocalRepo: ChatRepository = InMemoryChatRepository(),
 ) : ChatRepository {
 
     private val sessionsState = MutableStateFlow<List<ChatSession>>(emptyList())
@@ -32,18 +33,17 @@ class NetworkChatRepository(
             val apiSessions = try {
                 apiServiceSupplier().getSessions()
             } catch (e: Exception) {
-                if (e is CancellationException) throw e
-                null
+                if (e is CancellationException) throw e else null
             }
 
             if (apiSessions != null) {
-                val mapped = apiSessions.map { dto ->
+                val mapped = apiSessions.map { (id, title, source, createdAt) ->
                     ChatSession(
-                        id = dto.id,
-                        title = dto.title ?: "Chat Session",
-                        createdAt = parseTimestamp(dto.createdAt),
-                        lastUpdatedAt = parseTimestamp(dto.createdAt),
-                        source = dto.source
+                        id = id,
+                        title = title ?: "Chat Session",
+                        createdAt = parseTimestamp(createdAt),
+                        lastUpdatedAt = parseTimestamp(createdAt),
+                        source = source
                     )
                 }
                 sessionsState.value = mapped
@@ -57,7 +57,7 @@ class NetworkChatRepository(
     override fun getMessages(sessionId: String): Flow<List<ChatMessage>> {
         return flow {
             val api = apiServiceSupplier()
-            val runs = api.getRuns(sessionId).sortedBy { it.get("created_at")?.asString.orEmpty() }
+            val runs = api.getRuns(sessionId).sortedBy { it["created_at"]?.asString.orEmpty() }
             val history = runs.flatMap { run ->
                 val runId = run.get("id").asString
                 val record = api.getRunRecord(runId)
@@ -81,7 +81,7 @@ class NetworkChatRepository(
                     )
                 }.orEmpty()
             }
-            messagesState.value = messagesState.value + (sessionId to history)
+            messagesState.value += (sessionId to history)
             emitAll(messagesState.asStateFlow().map { it[sessionId].orEmpty() })
         }
     }
@@ -172,13 +172,13 @@ class NetworkChatRepository(
                     sessionId = sessionId,
                     sender = MessageSender.ASSISTANT,
                     content = currentText.toString(),
-                    isStreaming = i < words.size - 1
+                    isStreaming = i < (words.size - 1)
                 )
                 val updatedList = (messagesState.value[sessionId] ?: emptyList()).filterNot { it.id == assistantMsgId }
                 messagesState.value = messagesState.value + (sessionId to (updatedList + assistantMsg))
 
                 emit(currentText.toString())
-                delay(30L)
+                delay(30.milliseconds)
             }
         } else {
             fallbackLocalRepo.generateAiResponse(sessionId, prompt).collect { text ->
@@ -191,7 +191,7 @@ class NetworkChatRepository(
         if (dateStr == null) return System.currentTimeMillis()
         return try {
             java.time.Instant.parse(dateStr).toEpochMilli()
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             System.currentTimeMillis()
         }
     }
