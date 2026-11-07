@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 13+ themed-icon layer: single colour, alpha shape only.
+     Same corner; the box becomes a hollow outline so it survives tinting. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <path android:fillColor="#000000"
+        android:pathData="M24,24 L34,24 L34,74 L84,74 L84,84 L24,84 Z" />
+    <path android:fillColor="#000000" android:fillType="evenOdd"
+        android:pathData="M44,58 L60,58 L60,74 L44,74 Z M49,63 L55,63 L55,69 L49,69 Z" />
+</vector>
